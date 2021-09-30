@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-primary
+  namespace: livros
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/component: primary
+    app.kubernetes.io/part-of: app-livros
+    app.kubernetes.io/version: "7.2"
+spec:
+  selector:
+    matchLabels:
+      app: livros
+      role: primary
+      tier: backend
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: livros
+        role: primary
+        tier: backend
+    spec:
+      containers:
+      - name: redis
+        image: redis:7.2-alpine
+        command: ["redis-server", "/etc/redis/redis.conf"]
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 200m
+            memory: 256Mi
+        ports:
+        - containerPort: 6379
+          name: redis
+        livenessProbe:
+          tcpSocket:
+            port: redis
+          initialDelaySeconds: 15
+          periodSeconds: 20
+          failureThreshold: 3
+        readinessProbe:
+          exec:
+            command: ["redis-cli", "ping"]
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3
+        volumeMounts:
+        - name: redis-config
+          mountPath: /etc/redis
+      volumes:
+      - name: redis-config
+        configMap:
+          name: redis-config
