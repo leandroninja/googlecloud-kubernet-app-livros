@@ -100,9 +100,9 @@ kubectl logs -l app=livros,role=primary -n livros
 | `frontend-service.yml` | Service LoadBalancer — expõe porta 80 |
 | `frontend-hpa.yml` | HorizontalPodAutoscaler (2–10 pods) |
 | `network-policy.yml` | NetworkPolicies de isolamento |
-| `pdb.yml` | PodDisruptionBudgets para HA |
+| `pdb.yml` | PodDisruptionBudgets para alta disponibilidade |
 | `nginx.yml` | Ingress NGINX (alternativa ao LoadBalancer) |
-| `multi.yml` | Todos os manifests combinados |
+| `multi.yml` | Todos os manifests combinados em ordem |
 
 ## Recursos e limites
 
@@ -115,8 +115,8 @@ kubectl logs -l app=livros,role=primary -n livros
 ## Auto-scaling (HPA)
 
 O frontend escala automaticamente entre **2 e 10 pods** com base em:
-- CPU > 70% de utilização média
-- Memória > 80% de utilização média
+- CPU acima de 70% de utilização média
+- Memória acima de 80% de utilização média
 
 ## Ingress NGINX (opcional)
 
@@ -126,7 +126,7 @@ Se preferir usar Ingress ao invés de LoadBalancer, instale o controller primeir
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.10.0/deploy/static/provider/cloud/deploy.yaml
 ```
 
-Depois edite `nginx.yml` e troque `livros.example.com` pelo seu domínio, e aplique:
+Depois edite `nginx.yml` e substitua `livros.example.com` pelo seu domínio, e aplique:
 
 ```bash
 kubectl apply -f nginx.yml
