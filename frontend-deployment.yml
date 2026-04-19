@@ -2,29 +2,51 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: frontend
+  namespace: livros
   labels:
-    app: guestbook
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: app-livros
+    app.kubernetes.io/version: "5"
 spec:
   selector:
     matchLabels:
-      app: guestbook
+      app: livros
       tier: frontend
   replicas: 3
   template:
     metadata:
       labels:
-        app: guestbook
+        app: livros
         tier: frontend
     spec:
       containers:
-      - name: php-redis
-        image: gcr.io/google-samples/gb-frontend:v4
+      - name: frontend
+        image: gcr.io/google-samples/gb-frontend:v5
         resources:
           requests:
             cpu: 100m
             memory: 100Mi
+          limits:
+            cpu: 250m
+            memory: 256Mi
         env:
         - name: GET_HOSTS_FROM
           value: dns
         ports:
         - containerPort: 80
+          name: http
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 10
+          periodSeconds: 15
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          failureThreshold: 3

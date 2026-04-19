@@ -1,0 +1,38 @@
+# Kubernetes
+kubeconfig
+*.kubeconfig
+kube-config.yml
+
+# Secrets e credenciais
+*.pem
+*.key
+*.crt
+*.p12
+secrets.yml
+*-secret.yml
+service-account*.json
+
+# Google Cloud
+.gcloud/
+gcloud-service-key.json
+
+# Terraform (se usado junto)
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
+
+# Helm
+charts/
+*.tgz
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db

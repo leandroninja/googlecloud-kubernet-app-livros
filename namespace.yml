@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: livros
+  labels:
+    app.kubernetes.io/name: livros
+    app.kubernetes.io/part-of: app-livros

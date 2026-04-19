@@ -1,0 +1,30 @@
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: frontend-pdb
+  namespace: livros
+  labels:
+    app.kubernetes.io/name: frontend
+    app.kubernetes.io/part-of: app-livros
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: livros
+      tier: frontend
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: redis-replica-pdb
+  namespace: livros
+  labels:
+    app.kubernetes.io/name: redis
+    app.kubernetes.io/part-of: app-livros
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app: livros
+      role: replica
+      tier: backend
